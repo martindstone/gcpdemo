@@ -1,0 +1,17 @@
+<h1>Incident <%= @incident.omg_title %></h1>
+<p>&nbsp;</p>
+<% column_list = %w(omg_id omg_title drill_tester_email workspace_bugs gcp_bugs) %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <% column_list.each do |n| %>
+    <tr>
+      <%= content_tag(:td, n) %>
+      <%= content_tag(:td, @incident.send(n)) %>
+    </tr>
+  <% end %>
+</table>

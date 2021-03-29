@@ -1,0 +1,47 @@
+<h1>New Incident</h1>
+<p>&nbsp;</p>
+<%= form_with model: @incident, url: incidents_path, local: true do |form| %>
+    <div class="form-row">
+        <div class="form-group col-md-2" align="right">
+            omg_id:
+        </div>
+        <div class="form-group col-md-10">
+            <%= text_field_tag(:omg_id, nil, class: "form-control") %>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2" align="right">
+            omg_title:
+        </div>
+        <div class="form-group col-md-10">
+            <%= text_field_tag(:omg_title, nil, class: "form-control") %>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2" align="right">
+            drill_tester_email:
+        </div>
+        <div class="form-group col-md-10">
+            <%= text_field_tag(:drill_tester_email, nil, class: "form-control") %>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2" align="right">
+            workspace_bugs:
+        </div>
+        <div class="form-group col-md-10">
+            <%= text_field_tag(:workspace_bugs, nil, class: "form-control") %>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2" align="right">
+            gcp_bugs:
+        </div>
+        <div class="form-group col-md-10">
+            <%= text_field_tag(:gcp_bugs, nil, class: "form-control") %>
+        </div>
+    </div>
+    <div align="right">
+      <%= submit_tag "Submit", class: "btn btn-primary" %>
+    </div>
+<% end %>
