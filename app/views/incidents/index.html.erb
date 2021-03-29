@@ -1,4 +1,4 @@
-<h1>Incidents</h1>
+<h1>Incidents for <%= @user.email %></h1>
 <p>&nbsp;</p>
 <% column_list = %w(omg_id omg_title drill_tester_email workspace_bugs gcp_bugs) %>
 <table class="table table-striped">
@@ -9,7 +9,7 @@
       <% end %>
     </tr>
   </thead>
-  <% Incident.all.each do |i| %>
+  <% @incidents.each do |i| %>
     <tr>
       <% column_list.each do |n| %>
         <%= content_tag(:td, i.send(n)) %>
