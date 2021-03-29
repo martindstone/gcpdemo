@@ -15,3 +15,18 @@
     </tr>
   <% end %>
 </table>
+<h2>Activities</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Timestamp</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <% @incident.activities.each do |a| %>
+    <tr>
+      <td><%= a.created_at %></td>
+      <td><%= a.description %></td>
+    </tr>
+  <% end %>
+</table>

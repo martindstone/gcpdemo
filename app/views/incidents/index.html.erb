@@ -4,6 +4,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th>ID</th>
       <% column_list.each do |n| %>
         <%= content_tag(:th, n) %>
       <% end %>
@@ -11,6 +12,7 @@
   </thead>
   <% @incidents.each do |i| %>
     <tr>
+      <td><%= link_to i.id, incident_path(i) %></td>
       <% column_list.each do |n| %>
         <%= content_tag(:td, i.send(n)) %>
       <% end %>
