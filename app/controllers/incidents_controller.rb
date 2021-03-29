@@ -19,7 +19,13 @@ class IncidentsController < ApplicationController
 
   def show
     @incident = Incident.find(params[:id])
-    @services = PdClient.fetch(current_user.api_key, 'services')
+    if @incident.pd_incident_id.nil?
+      @services = PdClient.fetch(@user.api_key, 'services')
+    else
+      @users = PdClient.fetch(@user.api_key, 'users')
+      @eps = PdClient.fetch(@user.api_key, 'escalation_policies')
+      @teams = PdClient.fetch(@user.api_key, 'teams')
+    end
   end
 
   def create_pd_incident
@@ -56,6 +62,88 @@ class IncidentsController < ApplicationController
     i.save
     i.activities.create(description: "Created PagerDuty incident #{i.pd_incident_id}")
     redirect_to incident_url(i)
+  end
+
+  def add_responders
+    i = Incident.find(params[:id])
+    responders = []
+    user_ids = params[:user_ids] || []
+    ep_ids = params[:ep_ids] || []
+    for user_id in user_ids
+      responders << {
+        responder_request_target: {
+          type: "user_reference",
+          id: user_id
+        }
+      }
+    end
+    for ep_id in ep_ids
+      responders << {
+        responder_request_target: {
+          type: "escalation_policy_reference",
+          id: ep_id
+        }
+      }
+    end
+    if responders.count == 0
+      redirect_to incident_url(i), notice: "Nothing to do"
+      return
+    end
+
+    pd_user = PdClient.get(@user.api_key, 'users', {query: @user.email})['users'][0]
+    body = {
+      requester_id: pd_user['id'],
+      message: "Please help with '#{i.omg_title}'",
+      responder_request_targets: responders
+    }
+    rq = PdClient.post(@user.api_key, @user.email, "incidents/#{i.pd_incident_id}/responder_requests", JSON.generate(body))
+    things_added = []
+    if user_ids.count > 0
+      things_added << "users #{user_ids.to_sentence}"
+    end
+    if ep_ids.count > 0
+      things_added << "escalation policies #{ep_ids.to_sentence}"
+    end
+    i.activities.create(description: "Added #{things_added.to_sentence} as responders")
+
+    redirect_to incident_url(i), notice: "Responders added"
+  end
+
+  def add_subscribers
+    i = Incident.find(params[:id])
+    subscribers = []
+    user_ids = params[:user_ids] || []
+    team_ids = params[:team_ids] || []
+    for user_id in user_ids
+      subscribers << {
+        subscriber_id: user_id,
+        subscriber_type: "user"
+      }
+    end
+    for team_id in team_ids
+      subscribers << {
+        subscriber_id: team_id,
+        subscriber_type: "team"
+      }
+    end
+    if subscribers.count == 0
+      redirect_to incident_url(i), notice: "Nothing to do"
+      return
+    end
+
+    body = {
+      subscribers: subscribers
+    }
+    rq = PdClient.post(@user.api_key, @user.email, "incidents/#{i.pd_incident_id}/status_updates/subscribers", JSON.generate(body))
+    things_added = []
+    if user_ids.count > 0
+      things_added << "users #{user_ids.to_sentence}"
+    end
+    if team_ids.count > 0
+      things_added << "teams #{team_ids.to_sentence}"
+    end
+    i.activities.create(description: "Added #{things_added.to_sentence} as subscribers")
+    redirect_to incident_url(i), notice: "Subscribers added"
   end
 
   def get_current_user

@@ -1,3 +1,4 @@
+<%= render 'incidents/dialogs' %>
 <h1>Incident <%= @incident.omg_title %></h1>
 <p>&nbsp;</p>
 <% column_list = %w(omg_id omg_title drill_tester_email workspace_bugs gcp_bugs) %>
@@ -32,6 +33,15 @@
     </table>
   </div>
   <div class="col-md-6">
+    <% if not @incident.pd_incident_id.nil? %>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#respondersModal">
+        Add Responders...
+      </button>
+      <p>&nbsp;</p>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subscribersModal">
+        Add Subscribers...
+      </button>
+    <% end %>
   </div>
 </div>
 <h2>Activities</h2>

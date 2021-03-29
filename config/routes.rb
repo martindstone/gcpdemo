@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   resources :incidents do
     post 'create_pd_incident', on: :member, to: 'incidents#create_pd_incident', as: 'create_pd'
+    post 'add_responders', on: :member, to: 'incidents#add_responders', as: 'add_responders'
+    post 'add_subscribers', on: :member, to: 'incidents#add_subscribers', as: 'add_subscribers'
   end
 end

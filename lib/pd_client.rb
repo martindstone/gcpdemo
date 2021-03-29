@@ -9,7 +9,7 @@ module PdClient
 		end
 	end
 
-	def get(token, endpoint, query: nil, addheaders: nil)
+	def get(token, endpoint, query = nil, addheaders = nil)
 		auth = auth_str_for_token(token)
 		headers = {
 			'Accept' => 'application/vnd.pagerduty+json;version=2',
@@ -27,7 +27,7 @@ module PdClient
 		response.parsed_response
 	end
 
-	def delete(token, endpoint, addheaders: nil)
+	def delete(token, endpoint, addheaders = nil)
 		auth = auth_str_for_token(token)
 		headers = {
 			'Accept' => 'application/vnd.pagerduty+json;version=2',
@@ -44,7 +44,7 @@ module PdClient
 		response.parsed_response
 	end
 
-	def post(token, from, endpoint, json, addheaders: nil)
+	def post(token, from, endpoint, json, addheaders = nil)
 		auth = auth_str_for_token(token)
 		headers = {
 			'Accept' => 'application/vnd.pagerduty+json;version=2',
@@ -66,7 +66,7 @@ module PdClient
 		response.parsed_response
 	end
 
-	def put(token, from, endpoint, json, addheaders: nil)
+	def put(token, from, endpoint, json, addheaders = nil)
 		auth = auth_str_for_token(token)
 		headers = {
 			'Accept' => 'application/vnd.pagerduty+json;version=2',
@@ -88,7 +88,7 @@ module PdClient
 		response.parsed_response
 	end
 
-	def fetch(token, endpoint, query: {}, addheaders: nil)
+	def fetch(token, endpoint, query = nil, addheaders = nil)
 		more = true
 		if query.nil?
 			query = {}
@@ -96,23 +96,17 @@ module PdClient
 		query = query.merge({offset: 0})
 		fetched_data = []
 		while more
-			page = get(token, endpoint, query: query, addheaders: addheaders)
+			page = get(token, endpoint, query, addheaders)
 			unless page.respond_to?("has_key?")
-				AppLogger.error({
-					"message": "Get did not return a hash in fetch #{endpoint}: #{page}"
-				})
+				Rails.logger.error("Get did not return a hash in fetch #{endpoint}: #{page}")
 				return nil
 			end
 			if page.has_key?("error")
-				AppLogger.error({
-					"message": "Error in fetch #{endpoint}: #{page}"
-				})
+				Rails.logger.error("Error in fetch #{endpoint}: #{page}")
 				return nil
 			end
 			unless page.has_key?(endpoint)
-				AppLogger.error({
-					"message": "Page doesn't have endpoint element in fetch #{endpoint}: #{page}"
-				})
+				Rails.logger.error("Page doesn't have endpoint element in fetch #{endpoint}: #{page}")
 				return nil
 			end
 			fetched_data += page[endpoint]
