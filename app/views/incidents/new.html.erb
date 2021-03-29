@@ -3,10 +3,10 @@
 <%= form_with model: @incident, url: incidents_path, local: true do |form| %>
     <div class="form-row">
         <div class="form-group col-md-2" align="right">
-            omg_id:
+            OMG ID:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:omg_id, nil, class: "form-control") %>
+            <%= text_field_tag(:omg_id, nil, class: "form-control", required: true) %>
         </div>
     </div>
     <div class="form-row">
@@ -14,7 +14,7 @@
             omg_title:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:omg_title, nil, class: "form-control") %>
+            <%= text_field_tag(:omg_title, nil, class: "form-control", required: true) %>
         </div>
     </div>
     <div class="form-row">

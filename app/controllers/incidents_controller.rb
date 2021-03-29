@@ -30,6 +30,11 @@ class IncidentsController < ApplicationController
     if not i.pd_incident_id.nil?
       redirect_to incident_url(i), alert: 'oops, already has'
     end
+    details = "OMG ID: #{i.omg_id}\n" +
+      "OMG Title: #{i.omg_title}\n" +
+      "Drill Tester Email: #{i.drill_tester_email}\n" +
+      "Workspace Bugs: #{i.workspace_bugs}\n" +
+      "GCP Bugs: #{i.gcp_bugs}"
     body = {
       incident: {
         type: "incident",
@@ -37,6 +42,10 @@ class IncidentsController < ApplicationController
         service: {
           type: "service_reference",
           id: params[:service_id]
+        },
+        body: {
+          type: "incident_body",
+          details: details
         }
       }
     }
