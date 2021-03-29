@@ -1,6 +1,6 @@
 require 'httparty'
 
-module PDClient
+module PdClient
 	def auth_str_for_token(token)
 		if /^[0-9a-f]{64}$/.match?(token)
 			"Bearer #{token}"
