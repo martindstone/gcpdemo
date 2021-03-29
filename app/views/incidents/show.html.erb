@@ -1,20 +1,39 @@
 <h1>Incident <%= @incident.omg_title %></h1>
 <p>&nbsp;</p>
 <% column_list = %w(omg_id omg_title drill_tester_email workspace_bugs gcp_bugs) %>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Key</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-  <% column_list.each do |n| %>
-    <tr>
-      <%= content_tag(:td, n) %>
-      <%= content_tag(:td, @incident.send(n)) %>
-    </tr>
-  <% end %>
-</table>
+<div class="row">
+  <div class="col-md-6">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td width="30%" align="right"><b>Key</b></td>
+          <td><b>Value</b></td>
+        </tr>
+      </thead>
+      <% column_list.each do |n| %>
+        <tr>
+          <%= content_tag(:td, n, align: :right) %>
+          <%= content_tag(:td, @incident.send(n)) %>
+        </tr>
+      <% end %>
+      <tr>
+        <td align="right">PagerDuty Incident</td>
+        <td>
+          <% if @incident.pd_incident_id.nil? %>
+            <%= form_tag create_pd_incident_path(@incident) do %>
+              <%= select_tag 'service_id', options_for_select(@services.map { |s| [s['summary'], s['id']]}), class: "form-control" %>
+              <%= submit_tag "Create", class: "btn btn-primary" %>
+            <% end %>
+          <% else %>
+            <%= link_to "View", @incident.pd_incident_url, class: "btn btn-primary", target: "_blank" %>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+  </div>
+</div>
 <h2>Activities</h2>
 <table class="table table-striped">
   <thead>
