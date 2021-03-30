@@ -23,7 +23,7 @@ class IncidentsController < ApplicationController
       @services = PdClient.fetch(@user.api_key, 'services')
     else
       @pd_incident = PdClient.get(@user.api_key, "incidents/#{@incident.pd_incident_id}", {include: ['responders']})
-      @response_plays = PdClient.fetch(@user.api_key, 'response_plays', {filter_for_manual_run: true})
+      @response_plays = PdClient.fetch(@user.api_key, 'response_plays', {filter_for_manual_run: true}, {'From': @user.email})
       @subscribers = PdClient.get(@user.api_key, "incidents/#{@incident.pd_incident_id}/status_updates/subscribers")['subscribers']
       @users = PdClient.fetch(@user.api_key, 'users')
       @eps = PdClient.fetch(@user.api_key, 'escalation_policies')
