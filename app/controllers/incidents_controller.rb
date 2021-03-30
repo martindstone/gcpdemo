@@ -150,6 +150,7 @@ class IncidentsController < ApplicationController
     i = Incident.find(params[:id])
     t = MessageTemplate.find(params[:template_id])
     e = ERB.new(t.text)
+    pdi = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}")['incident']
     @incident = i
     @html_message = e.result(binding)
     render inline: "<%= raw @html_message %>"

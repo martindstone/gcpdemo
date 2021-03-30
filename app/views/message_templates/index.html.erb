@@ -1,6 +1,6 @@
 <h1>Templates</h1>
 <p>&nbsp;</p>
-<% column_list = %w(name) %>
+<% column_list = %w(name short_text text) %>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -8,14 +8,19 @@
       <% column_list.each do |n| %>
         <%= content_tag(:th, n) %>
       <% end %>
+      <th>Actions</th>
     </tr>
   </thead>
   <% MessageTemplate.all.each do |t| %>
     <tr>
       <td><%= link_to t.id, message_template_path(t) %></td>
       <% column_list.each do |n| %>
-        <%= content_tag(:td, t.send(n)) %>
+        <%= content_tag(:td, t.send(n).nil? ? '' : t.send(n).truncate(80)) %>
       <% end %>
+      <td>
+        <%= link_to "Edit", edit_message_template_path(t), class: "btn btn-primary" %>
+        <%= link_to "Delete", message_template_path(t), method: 'DELETE', class: "btn btn-danger" %>
+      </td>
     </tr>
   <% end %>
 </table>

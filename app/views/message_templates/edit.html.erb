@@ -1,13 +1,13 @@
-<script src="https://pagecdn.io/lib/ace/1.4.12/ace.js" crossorigin="anonymous" integrity="sha256-Q9hnBpgBFstzZOr+OKFOWZWfcF5nFXO8Qz48Nmndo6U=" ></script>
-<h1>New Template</h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" integrity="sha512-GZ1RIgZaSc8rnco/8CXfRdCpDxRCphenIiZ2ztLy3XQfCbQUSCuk8IudvNHxkRA3oUg6q0qejgN/qqyG1duv5Q==" crossorigin="anonymous"></script>
+<h1>Edit Template</h1>
 <p>&nbsp;</p>
-<%= form_with model: @message_template, url: message_templates_path, local: true do |form| %>
+<%= form_with model: @message_template, url: message_template_path, local: true do |form| %>
     <div class="form-row">
         <div class="form-group col-md-2" align="right">
             Name:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:name, nil, class: "form-control", required: true) %>
+            <%= text_field_tag(:name, @message_template.name, class: "form-control", required: true) %>
         </div>
     </div>
     <div class="form-row">
@@ -15,7 +15,7 @@
             SMS/Push Template:
         </div>
         <div class="form-group col-md-10">
-            <div style="height: 2rem;" id="short-text-editor"></div>
+            <div style="height: 2rem;" id="short-text-editor"><%= @message_template.short_text %></div>
         </div>
     </div>
     <div class="form-row">
@@ -23,7 +23,7 @@
             Email Template:
         </div>
         <div class="form-group col-md-10">
-            <div style="height: 20rem;" id="text-editor"></div>
+            <div style="height: 30rem;" id="text-editor"><%= @message_template.text %></div>
         </div>
     </div>
 
