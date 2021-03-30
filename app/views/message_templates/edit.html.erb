@@ -42,6 +42,7 @@ $(() => {
     editor.getSession().on("change", function () {
         textarea.val(editor.getSession().getValue());
     });
+    textarea.val(editor.getSession().getValue());
 
     var short_editor = ace.edit("short-text-editor");
     short_editor.setTheme("ace/theme/monokai");
@@ -50,5 +51,6 @@ $(() => {
     short_editor.getSession().on("change", function () {
         short_textarea.val(short_editor.getSession().getValue());
     });
+    short_textarea.val(short_editor.getSession().getValue());
 })
 </script>

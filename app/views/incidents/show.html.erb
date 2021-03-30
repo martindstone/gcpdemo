@@ -34,20 +34,86 @@
   </div>
   <div class="col-md-6">
     <% if not @incident.pd_incident_id.nil? %>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#respondersModal">
-        Add Responders...
-      </button>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-header">
+              Responders
+            </div>
+            <div class="card-body" align="center">
+              <h1>
+                <%= @pd_incident['incident']['incidents_responders'] ? @pd_incident['incident']['incidents_responders'].count : 0%>
+              </h1>
+              responders added
+              <p>&nbsp;</p>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#respondersModal">
+                Add Responders...
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-header">
+              Subscribers
+            </div>
+            <div class="card-body" align="center">
+              <h1>
+                <%= @subscribers.count %>
+              </h1>
+              subscribers added
+              <p>&nbsp;</p>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subscribersModal">
+                Add Subscribers...
+              </button>
+            </div>
+        </div>
+      </div>
+      </div>
       <p>&nbsp;</p>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subscribersModal">
-        Add Subscribers...
-      </button>
-      <p>&nbsp;</p>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal">
-        Preview Message...
-      </button>
+      <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-header">
+              Response Plays
+            </div>
+            <div class="card-body" align="center">
+              <h1>
+                <%= @response_plays.count%>
+              </h1>
+              plays available
+              <p>&nbsp;</p>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#responsePlayModal">
+                Run a Response Play...
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-header">
+              Status Updates
+            </div>
+            <div class="card-body" align="center">
+              <h1>
+                <%= @incident.activities.select { |a| a.description == "Sent status update" }.count %>
+              </h1>
+              status updates sent
+              <p>&nbsp;</p>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal">
+                Preview Message...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <% end %>
   </div>
 </div>
+<div class="container-fluid">
 <h2>Activities</h2>
 <table class="table table-striped">
   <thead>
@@ -63,3 +129,4 @@
     </tr>
   <% end %>
 </table>
+</div>

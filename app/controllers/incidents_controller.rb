@@ -22,6 +22,9 @@ class IncidentsController < ApplicationController
     if @incident.pd_incident_id.nil?
       @services = PdClient.fetch(@user.api_key, 'services')
     else
+      @pd_incident = PdClient.get(@user.api_key, "incidents/#{@incident.pd_incident_id}", {include: ['responders']})
+      @response_plays = PdClient.fetch(@user.api_key, 'response_plays', {filter_for_manual_run: true})
+      @subscribers = PdClient.get(@user.api_key, "incidents/#{@incident.pd_incident_id}/status_updates/subscribers")['subscribers']
       @users = PdClient.fetch(@user.api_key, 'users')
       @eps = PdClient.fetch(@user.api_key, 'escalation_policies')
       @teams = PdClient.fetch(@user.api_key, 'teams')
@@ -152,6 +155,8 @@ class IncidentsController < ApplicationController
     e = ERB.new(t.text)
     pdincident = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}", {include: ['metadata']})['incident']
     pdi = JSON.parse(pdincident.to_json, object_class: OpenStruct)
+    log_entries = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}/log_entries")['log_entries']
+    les = JSON.parse(log_entries.to_json, object_class: OpenStruct)
     @incident = i
     @html_message = e.result(binding)
     render inline: "<%= raw @html_message %>"
@@ -160,6 +165,13 @@ class IncidentsController < ApplicationController
   def message_preview
     @incident = Incident.find(params[:id])
     @template = MessageTemplate.find(params[:template_id])
+    i = @incident
+    pdincident = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}", {include: ['metadata']})['incident']
+    pdi = JSON.parse(pdincident.to_json, object_class: OpenStruct)
+    log_entries = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}/log_entries")['log_entries']
+    les = JSON.parse(log_entries.to_json, object_class: OpenStruct)
+    se = ERB.new(@template.short_text)
+    @short_message = se.result(binding)
     render "preview"
   end
 
@@ -167,10 +179,13 @@ class IncidentsController < ApplicationController
     i = Incident.find(params[:id])
     t = MessageTemplate.find(params[:template_id])
     e = ERB.new(t.text)
+    se = ERB.new(t.short_text)
     pdincident = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}", {include: ['metadata']})['incident']
     pdi = JSON.parse(pdincident.to_json, object_class: OpenStruct)
+    log_entries = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}/log_entries")['log_entries']
+    les = JSON.parse(log_entries.to_json, object_class: OpenStruct)
     html_message = e.result(binding)
-    plain_message = "Status update for incident \"#{i.omg_title}\""
+    plain_message = se.result(binding)
     subject = "Status update for incident \"#{i.omg_title}\""
     body = {
       content_type: "text/html",
@@ -185,7 +200,20 @@ class IncidentsController < ApplicationController
       message: plain_message
     }
     r = PdClient.post(@user.api_key, @user.email, "incidents/#{i.pd_incident_id}/status_updates", JSON.generate(body))
+    i.activities.create(description: "Sent status update")
     redirect_to incident_url(i), notice: "Status update sent"
+  end
+
+  def response_play
+    i = Incident.find(params[:id])
+    body = {
+      incident: {
+        id: i.pd_incident_id,
+        type: "incident_reference"
+      }
+    }
+    r = PdClient.post(@user.api_key, @user.email, "response_plays/#{params[:response_play_id]}/run", JSON.generate(body))
+    redirect_to incident_url(i), notice: "Running response play"
   end
 
   def get_current_user

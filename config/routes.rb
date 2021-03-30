@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     post 'message_preview', on: :member, to: 'incidents#message_preview', as: 'message_preview'
     get 'message_preview_raw', on: :member, to: 'incidents#message_preview_raw', as: 'message_preview_raw'
     get 'message_send', on: :member, to: 'incidents#message_send', as: 'message_send'
+    post 'response_play', on: :member, to: 'incidents#response_play', as: 'response_play'
   end
   resources :message_templates
 end

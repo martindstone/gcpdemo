@@ -8,9 +8,28 @@
       <%= link_to "Send Message", "/incidents/#{@incident.id}/message_send?template_id=#{@template.id}", method: "GET", class: "btn btn-primary" %>
     </div>
   </div>
-  <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" src=<%= "/incidents/#{@incident.id}/message_preview_raw?template_id=#{@template.id}" %>>
-    </iframe>
+  <p>&nbsp;</p>
+  <div class="row">
+    <div align="right" class="col-md-2 float-right">
+      <h3>SMS/Push message:</h3>
+    </div>
+    <div class="col-md-10">
+      <span class="rounded" style="padding:10px; background-color: #fff">
+      <code><%= @short_message %></code>
+      </span>
+    </div>
+  </div>
+  <p>&nbsp;</p>
+  <div class="row">
+    <div align="right" class="col-md-2 float-right">
+      <h3>Email message:</h3>
+    </div>
+    <div class="col-md-10">
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src=<%= "/incidents/#{@incident.id}/message_preview_raw?template_id=#{@template.id}" %>>
+        </iframe>
+      </div>
+    </div>
   </div>
 </div>
 </body>
