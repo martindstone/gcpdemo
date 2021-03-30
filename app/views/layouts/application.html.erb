@@ -12,20 +12,16 @@
 
   <body>
     <div>&nbsp;</div>
+    <% if @current_user %>
+      <%= render 'layouts/header' %>
+      <p>&nbsp;</p>
+    <% end %>
     <div class="container-fluid">
       <% if not notice.nil? %>
         <p class="notice"><%= notice %></p>
       <% end %>
       <% if not alert.nil? %>
         <p class="alert"><%= alert %></p>
-      <% end %>
-      <% if not @current_user.nil? %>
-        <div class="row">
-          <div class="col-md-12" align="right">
-          <b>Hi <%= @current_user.email %></b>
-            <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
-          </div>
-        </div>
       <% end %>
       <%= yield %>
     </div>

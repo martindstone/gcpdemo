@@ -146,6 +146,44 @@ class IncidentsController < ApplicationController
     redirect_to incident_url(i), notice: "Subscribers added"
   end
 
+  def message_preview_raw
+    i = Incident.find(params[:id])
+    t = MessageTemplate.find(params[:template_id])
+    e = ERB.new(t.text)
+    @incident = i
+    @html_message = e.result(binding)
+    render inline: "<%= raw @html_message %>"
+  end
+
+  def message_preview
+    @incident = Incident.find(params[:id])
+    @template = MessageTemplate.find(params[:template_id])
+    render "preview"
+  end
+
+  def message_send
+    i = Incident.find(params[:id])
+    t = MessageTemplate.find(params[:template_id])
+    e = ERB.new(t.text)
+    html_message = e.result(binding)
+    plain_message = "Status update for incident \"#{i.omg_title}\""
+    subject = "Status update for incident \"#{i.omg_title}\""
+    body = {
+      content_type: "text/html",
+      contact_method_types: ["email"],
+      subject: subject,
+      message: html_message
+    }
+    r = PdClient.post(@user.api_key, @user.email, "incidents/#{i.pd_incident_id}/status_updates", JSON.generate(body))
+    body = {
+      content_type: "text/plain",
+      contact_method_types: ["sms", "push_notification"],
+      message: plain_message
+    }
+    r = PdClient.post(@user.api_key, @user.email, "incidents/#{i.pd_incident_id}/status_updates", JSON.generate(body))
+    redirect_to incident_url(i), notice: "Status update sent"
+  end
+
   def get_current_user
     @user = current_user
   end

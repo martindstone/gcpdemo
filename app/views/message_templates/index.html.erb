@@ -1,0 +1,24 @@
+<h1>Templates</h1>
+<p>&nbsp;</p>
+<% column_list = %w(name) %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <% column_list.each do |n| %>
+        <%= content_tag(:th, n) %>
+      <% end %>
+    </tr>
+  </thead>
+  <% MessageTemplate.all.each do |t| %>
+    <tr>
+      <td><%= link_to t.id, message_template_path(t) %></td>
+      <% column_list.each do |n| %>
+        <%= content_tag(:td, t.send(n)) %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+<div align="right">
+  <%= link_to "New Template", new_message_template_path, role: "button", class: "btn btn-primary" %>
+</div>
