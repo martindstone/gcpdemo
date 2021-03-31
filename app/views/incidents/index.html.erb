@@ -1,6 +1,15 @@
-<h1>Incidents</h1>
+<div class="row">
+  <div class="col-md-10">
+    <h1>Incidents</h1>
+  </div>
+  <div class="col-md-2" align="right">
+    <p>&nbsp;</p>
+    <%= link_to "New Incident", new_incident_path, role: "button", class: "btn btn-primary" %>
+  </div>
+</div>
 <p>&nbsp;</p>
 <% column_list = %w(omg_id omg_title drill_tester_email workspace_bugs gcp_bugs pd_incident_id) %>
+<h3>Open Incidents</h3>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -8,17 +17,40 @@
       <% column_list.each do |n| %>
         <%= content_tag(:th, n) %>
       <% end %>
+      <th>Actions</th>
     </tr>
   </thead>
-  <% @incidents.each do |i| %>
+  <% @incidents.select{|s| s.state != "closed"}.each do |i| %>
     <tr>
       <td><%= link_to i.id, incident_path(i) %></td>
       <% column_list.each do |n| %>
         <%= content_tag(:td, i.send(n)) %>
       <% end %>
+      <td><%= link_to "Close", incident_path(i), method: 'DELETE', class: "btn btn-danger" %></td>
     </tr>
   <% end %>
 </table>
-<div align="right">
-  <%= link_to "New Incident", new_incident_path, role: "button", class: "btn btn-primary" %>
-</div>
+<p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+<h3>Closed Incidents</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <% column_list.each do |n| %>
+        <%= content_tag(:th, n) %>
+      <% end %>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <% @incidents.select{|s| s.state == "closed"}.each do |i| %>
+    <tr>
+      <td><%= link_to i.id, incident_path(i) %></td>
+      <% column_list.each do |n| %>
+        <%= content_tag(:td, i.send(n)) %>
+      <% end %>
+      <td><%= link_to "Delete", incident_path(i), method: 'DELETE', class: "btn btn-danger" %></td>
+    </tr>
+  <% end %>
+</table>

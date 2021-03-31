@@ -31,6 +31,18 @@ class IncidentsController < ApplicationController
     end
   end
 
+  def destroy
+    i = Incident.find(params[:id])
+    if i.state == "closed"
+      i.destroy
+      redirect_to incidents_url, notice: "Baleeted"
+    else
+      i.state = "closed"
+      i.save
+      redirect_to incidents_url, notice: "Closed"
+    end
+  end
+
   def create_pd_incident
     i = Incident.find(params[:id])
     if i.nil?

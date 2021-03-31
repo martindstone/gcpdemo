@@ -4,7 +4,7 @@
     <div class="col-md-8">
       <h1>Message preview for incident "<%= @incident.omg_title %>"</h1>
     </div>
-    <div class="col-md-4 float-right">
+    <div align="right" class="col-md-4 float-right">
       <%= link_to "Send Message", "/incidents/#{@incident.id}/message_send?template_id=#{@template.id}", method: "GET", class: "btn btn-primary" %>
     </div>
   </div>
