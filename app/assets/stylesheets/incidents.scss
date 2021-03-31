@@ -1,3 +1,37 @@
 // Place all the styles related to the incidents controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+.wrapper {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(4, [col] 1fr );
+  grid-template-rows: repeat(2, [row] auto  );
+}
+
+.box {
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.a {
+  grid-column: col / span 2;
+  grid-row: row;
+  border: 1px solid rgba(0,0,0,0.125);
+}
+
+.b {
+  grid-column: col 3;
+  grid-row: row;
+}
+
+.c {
+  grid-column: col 4;
+  grid-row: row;
+}
+
+.d{
+  grid-column: col / span 4;
+  grid-row: row 2;
+  border: 1px solid rgba(0,0,0,0.125);
+}
