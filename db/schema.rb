@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_31_145822) do
+ActiveRecord::Schema.define(version: 2021_03_31_175725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,9 @@ ActiveRecord::Schema.define(version: 2021_03_31_145822) do
     t.string "pd_incident_id"
     t.string "pd_incident_url"
     t.string "state"
+    t.string "color"
+    t.text "description"
+    t.text "impacted_customers"
     t.index ["user_id"], name: "index_incidents_on_user_id"
   end
 

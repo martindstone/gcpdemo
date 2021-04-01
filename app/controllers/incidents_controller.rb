@@ -12,9 +12,26 @@ class IncidentsController < ApplicationController
   end
 
   def create
-    i = current_user.incidents.new(params.permit(:omg_id, :omg_title, :drill_tester_email, :workspace_bugs, :gcp_bugs))
+    i = current_user.incidents.new(params.permit(:omg_id, :omg_title, :drill_tester_email, :workspace_bugs, :gcp_bugs, :color, :description, :impacted_customers))
     i.save
     redirect_to incident_url(i)
+  end
+
+  def edit
+    @incident = Incident.find(params[:id])
+  end
+
+  def update
+    i = Incident.find(params[:id])
+    fields = [:omg_title, :drill_tester_email, :workspace_bugs, :gcp_bugs, :color, :description, :impacted_customers]
+    for field in fields
+      if params[field] != i[field]
+        i.activities.create(description: "Changed #{field.to_s.humanize.titleize} from '#{i[field]}' to '#{params[field]}'")
+      end
+    end
+    i.update(params.permit(:omg_title, :drill_tester_email, :workspace_bugs, :gcp_bugs, :color, :description, :impacted_customers))
+    i.save
+    redirect_to incident_url(i), notice: "Incident updated"
   end
 
   def show

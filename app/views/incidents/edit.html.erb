@@ -1,12 +1,12 @@
-<h1>New Incident</h1>
+<h1>Edit Incident <%= @incident.omg_title %></h1>
 <p>&nbsp;</p>
-<%= form_with model: @incident, url: incidents_path, local: true do |form| %>
+<%= form_with model: @incident, url: incident_path, local: true do |form| %>
     <div class="form-row">
         <div class="form-group col-md-2" align="right">
             OMG ID:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:omg_id, nil, class: "form-control", required: true) %>
+            <%= @incident.omg_id %>
         </div>
     </div>
     <div class="form-row">
@@ -14,7 +14,7 @@
             OMG Title:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:omg_title, nil, class: "form-control", required: true) %>
+            <%= text_field_tag(:omg_title, @incident.omg_title, class: "form-control", required: true) %>
         </div>
     </div>
     <div class="form-row">
@@ -22,7 +22,7 @@
             Drill Tester Email:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:drill_tester_email, nil, class: "form-control") %>
+            <%= text_field_tag(:drill_tester_email, @incident.drill_tester_email, class: "form-control") %>
         </div>
     </div>
     <div class="form-row">
@@ -30,7 +30,7 @@
             Workspace Bugs:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:workspace_bugs, nil, class: "form-control") %>
+            <%= text_field_tag(:workspace_bugs, @incident.workspace_bugs, class: "form-control") %>
         </div>
     </div>
     <div class="form-row">
@@ -38,7 +38,7 @@
             GCP Bugs:
         </div>
         <div class="form-group col-md-10">
-            <%= text_field_tag(:gcp_bugs, nil, class: "form-control") %>
+            <%= text_field_tag(:gcp_bugs, @incident.gcp_bugs, class: "form-control") %>
         </div>
     </div>
     <div class="form-row">
@@ -46,7 +46,7 @@
             Description:
         </div>
         <div class="form-group col-md-10">
-            <%= text_area_tag(:description, nil, class: "form-control") %>
+            <%= text_area_tag(:description, @incident.description, class: "form-control") %>
         </div>
     </div>
     <div class="form-row">
@@ -54,7 +54,7 @@
             Top Strategic Impacted Customers:
         </div>
         <div class="form-group col-md-10">
-            <%= text_area_tag(:impacted_customers, nil, class: "form-control") %>
+            <%= text_area_tag(:impacted_customers, @incident.impacted_customers, class: "form-control") %>
         </div>
     </div>
     <div class="form-row">
@@ -67,7 +67,7 @@
                 ["Yellow:\nNo media cycle or \n25% - 50% of impacted strategic customers escalate or \n20% - 50% support cases are P1", "yellow"],
                 ["Red:\nMedia cycle occurred or \n>50% of impacted strategic customers escalate or\n>50% support cases are P1", "red"]
             ] %>
-            <%= select_tag(:color, options_for_select(statuses), class: "form-control") %>
+            <%= select_tag(:color, options_for_select(statuses, @incident.color), class: "form-control") %>
         </div>
     </div>
 

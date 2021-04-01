@@ -26,7 +26,10 @@
       <% column_list.each do |n| %>
         <%= content_tag(:td, i.send(n)) %>
       <% end %>
-      <td><%= link_to "Close", incident_path(i), method: 'DELETE', class: "btn btn-danger" %></td>
+      <td>
+        <%= link_to "Edit", edit_incident_path(i), class: "btn btn-primary" %>
+        <%= link_to "Close", incident_path(i), method: 'DELETE', class: "btn btn-danger" %>
+      </td>
     </tr>
   <% end %>
 </table>

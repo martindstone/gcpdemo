@@ -1,8 +1,8 @@
 <%= render 'incidents/dialogs' %>
-<% column_list = %w(omg_id omg_title drill_tester_email workspace_bugs gcp_bugs) %>
+<% column_list = %w(omg_id omg_title drill_tester_email workspace_bugs gcp_bugs description impacted_customers color) %>
 <div class="wrapper">
   <div class="box a">
-    <h1>Incident <%= @incident.omg_title %></h1>
+    <h1>Incident <%= @incident.omg_title %> &nbsp; &nbsp; <%= link_to "Edit", edit_incident_path, class: "btn btn-primary" %></h1>
     <p>&nbsp;</p>
     <table class="table table-striped">
       <thead>
@@ -13,7 +13,7 @@
       </thead>
       <% column_list.each do |n| %>
         <tr>
-          <%= content_tag(:td, n, align: :right) %>
+          <%= content_tag(:td, n.to_s.titleize(keep_id_suffix: true), align: :right) %>
           <%= content_tag(:td, @incident.send(n)) %>
         </tr>
       <% end %>
