@@ -65,7 +65,9 @@
             </div>
             <div class="modal-body">
             Template:
-              <%= select_tag 'template_id', options_for_select(MessageTemplate.all.map { |s| [s['name'], s['id']]}), class: "form-control" %>
+                <%= select_tag 'template_id', options_for_select(MessageTemplate.all.map { |s| [s['name'], s['id']]}), class: "form-control" %>
+            Additional message:
+                <%= text_area_tag 'message', nil, class: "form-control", placeholder: "If you have an additional message to add before sending, type it here" %>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

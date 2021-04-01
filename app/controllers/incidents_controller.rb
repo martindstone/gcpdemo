@@ -186,6 +186,7 @@ class IncidentsController < ApplicationController
     pdi = JSON.parse(pdincident.to_json, object_class: OpenStruct)
     log_entries = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}/log_entries")['log_entries']
     les = JSON.parse(log_entries.to_json, object_class: OpenStruct)
+    message = params[:message]
     @incident = i
     @html_message = e.result(binding)
     render inline: "<%= raw @html_message %>"
@@ -194,6 +195,7 @@ class IncidentsController < ApplicationController
   def message_preview
     @incident = Incident.find(params[:id])
     @template = MessageTemplate.find(params[:template_id])
+    @message = params[:message]
     i = @incident
     pdincident = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}", {include: ['metadata']})['incident']
     pdi = JSON.parse(pdincident.to_json, object_class: OpenStruct)
@@ -213,6 +215,7 @@ class IncidentsController < ApplicationController
     pdi = JSON.parse(pdincident.to_json, object_class: OpenStruct)
     log_entries = PdClient.get(@user.api_key, "incidents/#{i.pd_incident_id}/log_entries")['log_entries']
     les = JSON.parse(log_entries.to_json, object_class: OpenStruct)
+    message = params[:message]
     html_message = e.result(binding)
     plain_message = se.result(binding)
     subject = "Status update for incident \"#{i.omg_title}\""
@@ -229,6 +232,9 @@ class IncidentsController < ApplicationController
       message: plain_message
     }
     r = PdClient.post(@user.api_key, @user.email, "incidents/#{i.pd_incident_id}/status_updates", JSON.generate(body))
+    if message and not message.blank?
+      i.activities.create(description: "Additional message added: #{message}")
+    end
     i.activities.create(description: "Sent status update")
     redirect_to incident_url(i), notice: "Status update sent"
   end
